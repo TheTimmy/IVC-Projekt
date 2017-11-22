@@ -88,7 +88,7 @@ light_source { <500, 500, -1000> White }
 			}
 		}
 	}
-	union { // körper
+	union { // koerper
 		sphere {
 			<0, -1.15, 0>, 1.25
 			scale x * 0.95 + z * 0.95
@@ -98,8 +98,8 @@ light_source { <500, 500, -1000> White }
 		}
 		union { // Arme
 			union { // Linker Arm
-				cylinder { // Arm
-					<0.45, -0.45, 0> <2.25, -0.45, 0> 0.25
+				cylinder { // Arm        
+					<0.45, -0.45, 0> <2.25, -0.45, 0> 0.25       
 					pigment {
 						Red
 					}
@@ -112,8 +112,11 @@ light_source { <500, 500, -1000> White }
 						White
 					}
 				}
-				rotate z * 20 * sin(2 * 3.141529 * clock)
-				translate x * sin(2 * 3.141592 * clock)
+				translate <-0.45, 0.45, 0>  
+				rotate z * -20
+				rotate y * 20 * sin(2 * 3.141529 * clock)
+				translate <0.45, -0.45, 0>
+				//translate x * sin(2 * 3.141592 * clock)
 			}
 			union { // Rechter Arm
 				cylinder { // Arm
@@ -130,6 +133,10 @@ light_source { <500, 500, -1000> White }
 						White
 					}
 				}
+                translate <-0.45, 0.45, 0>
+                rotate z * 20
+				rotate y * 20 * sin(2 * 3.141529 * clock)
+				translate <0.45, -0.45, 0>
 			}
 		}
 		union { // Beine
@@ -147,7 +154,10 @@ light_source { <500, 500, -1000> White }
 					pigment {
 						Brown
 					}
-				}
+				}        
+				translate <0.45, 2.0, 0>
+				rotate x * 20 * sin(2 * 3.141529 * clock)
+				translate <-0.45, -2.0, 0>
 			}
 			union { // Linkes Bein
 				cylinder {
@@ -164,6 +174,9 @@ light_source { <500, 500, -1000> White }
 						Brown
 					}
 				}
+				translate <0.45, 2.0, 0>
+				rotate x * -20 * sin(2 * 3.141529 * clock)
+				translate <-0.45, -2.0, 0>
 			}
 		}
 	}	
@@ -177,11 +190,11 @@ object {
 background { color rgb <0.5, 0.5, 0.5>}			
 			
 camera {
-  location <4, 1, -5>
+  location <20, 3, -15>
   look_at <0, 1, 0,>																																																												
 } 
 
-camera {
-  location <0, 1, -10>
-  look_at <0, 0, 0,>																																																												
-}
+//camera {
+//  location <0, 1, -10>
+//  look_at <0, 0, 0,>																																																												
+//}
