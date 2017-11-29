@@ -41,10 +41,10 @@
  
  
 //Materials
-#include "Tube_POV_mat.inc"
+#include "PovLevel/Tube_POV_mat.inc"
  
 //Geometry
-#include "Tube_Green_.inc"
+#include "PovLevel/Tube_Green_.inc"
  
 //Model assembly from the meshes
 #declare Tube_=

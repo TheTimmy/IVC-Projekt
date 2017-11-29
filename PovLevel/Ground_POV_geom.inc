@@ -45,11 +45,11 @@
  
  
 //Materials
-#include "Ground_POV_mat.inc"
+#include "PovLevel/Ground_POV_mat.inc"
  
 //Geometry
-#include "Ground_Building_.inc"
-#include "Ground_Grass_.inc"
+#include "PovLevel/Ground_Building_.inc"
+#include "PovLevel/Ground_Grass_.inc"
  
 //Model assembly from the meshes
 #declare Ground_=

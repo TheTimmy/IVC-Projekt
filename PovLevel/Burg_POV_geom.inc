@@ -44,10 +44,10 @@
  
  
 //Materials
-#include "Burg_POV_mat.inc"
+#include "PovLevel/Burg_POV_mat.inc"
  
 //Geometry
-#include "Burg_Building_.inc"
+#include "PovLevel/Burg_Building_.inc"
  
 //Model assembly from the meshes
 #declare Burg_=
