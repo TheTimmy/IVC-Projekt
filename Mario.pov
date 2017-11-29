@@ -1,5 +1,18 @@
 include "colors.inc"
 
+#if (clock < 1)
+    #declare walk = 1;
+    #declare jump = 0;
+#end
+#if (clock >= 1 & clock < 2)
+    #declare walk = 0;
+    #declare jump = 1;
+#end
+#if (clock >= 2 & clock < 3)
+    #declare walk = 1;
+    #declare jump = 0;
+#end
+
 light_source { <500, 500, -1000> White }     
 
 #declare SKINCOLOR = rgb <0.933, 0.811, 0.705>;
@@ -114,13 +127,18 @@ light_source { <500, 500, -1000> White }
 				}
 				translate <-0.45, 0.45, 0>  
 				rotate z * -20
-				rotate y * 20 * sin(2 * 3.141529 * clock)
+				#if (walk)
+				    rotate y * 20 * sin(2 * 3.141529 * clock)
+				#end
+				#if (jump)
+				    rotate y * -30 * abs(sin(3.141529 * clock))
+				    rotate z * -20 * abs(sin(3.141529 * clock))
+				#end
 				translate <0.45, -0.45, 0>
-				//translate x * sin(2 * 3.141592 * clock)
 			}
 			union { // Rechter Arm
 				cylinder { // Arm
-					<-0.5, -0.45, 0> <-2.25, -0.45, 0> 0.25
+					<-0.45, -0.45, 0> <-2.25, -0.45, 0> 0.25
 					pigment {
 						Red
 					}
@@ -133,10 +151,16 @@ light_source { <500, 500, -1000> White }
 						White
 					}
 				}
-                translate <-0.45, 0.45, 0>
-                rotate z * 20
-				rotate y * 20 * sin(2 * 3.141529 * clock)
-				translate <0.45, -0.45, 0>
+                translate <0.45, 0.45, 0>
+                rotate z * 20                        
+                #if (walk)
+				    rotate y * 20 * sin(2 * 3.141529 * clock)
+				#end       
+				#if (jump)
+				    rotate y * -30 * abs(sin(3.141529 * clock))
+				    rotate z * -80 * abs(sin(3.141529 * clock))
+				#end
+				translate <-0.45, -0.45, 0>
 			}
 		}
 		union { // Beine
@@ -156,7 +180,12 @@ light_source { <500, 500, -1000> White }
 					}
 				}        
 				translate <0.45, 2.0, 0>
-				rotate x * 20 * sin(2 * 3.141529 * clock)
+				#if (walk)
+				    rotate x * 20 * sin(2 * 3.141529 * clock)
+				#end
+				#if (jump)
+				    rotate x * -30 * abs(sin(3.141529 * clock))
+				#end
 				translate <-0.45, -2.0, 0>
 			}
 			union { // Linkes Bein
@@ -175,7 +204,12 @@ light_source { <500, 500, -1000> White }
 					}
 				}
 				translate <0.45, 2.0, 0>
-				rotate x * -20 * sin(2 * 3.141529 * clock)
+				#if (walk)
+				    rotate x * -20 * sin(2 * 3.141529 * clock)
+				#end
+				#if (jump)
+				    rotate x * 30 * abs(sin(3.141529 * clock))
+				#end
 				translate <-0.45, -2.0, 0>
 			}
 		}
@@ -184,6 +218,12 @@ light_source { <500, 500, -1000> White }
 
 object {
 	MARIO
+	#if (walk)
+	    translate <0, 0, -4 * clock>
+	#end
+	#if (jump)
+	    translate <0, 3 * abs(sin(3.141529 * clock)),-4 * clock>
+	#end
 }
 			
 
