@@ -10,7 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Z:\\My Documents\\POV-Ray\\Projekt\\Images\\Brick_Block.png
+map_Kd ..\Images\Brick_Block.png
 
 newmtl Logo
 Ns 96.078431
@@ -21,7 +21,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd \\rzfilesrv2\students\home\3rolff\My Documents\POV-Ray\Projekt\Images\Unihamburg-logo.png
+map_Kd ..\Images\Unihamburg-logo.png
 
 newmtl Logo_NONE
 Ns 96.078431
@@ -32,7 +32,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd \\\\rzfilesrv2\\students\\home\\3rolff\\My Documents\\POV-Ray\\Projekt\\Images\\Unihamburg-logo.png
+map_Kd ..\Images\Unihamburg-logo.png
 
 newmtl Metal
 Ns 96.078431
@@ -43,4 +43,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd \\\\rzfilesrv2\\students\\home\\3rolff\\My Documents\\POV-Ray\\Projekt\\Images\\Metal.jpg
+map_Kd ..\Images\Metal.jpg

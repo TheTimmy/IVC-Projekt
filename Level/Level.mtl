@@ -10,7 +10,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd \\rzfilesrv2\students\home\3rolff\My Documents\POV-Ray\Projekt\Images\Brick_Block.png
+map_Kd ..\Images\Brick_Block.png
 
 newmtl Building
 Ns 96.078431
@@ -21,7 +21,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd Z:\\My Documents\\POV-Ray\\Projekt\\Images\\Brick_Block.png
+map_Kd ..\Images\Brick_Block.png
 
 newmtl Grass
 Ns 96.078431
@@ -32,7 +32,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd \\\\rzfilesrv2\\students\\home\\3rolff\\My Documents\\POV-Ray\\Projekt\\Images\\Grass.png
+map_Kd ..\Images\Grass.png
 
 newmtl Green
 Ns 96.078431
@@ -53,7 +53,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd \\\\rzfilesrv2\\students\\home\\3rolff\\My Documents\\POV-Ray\\Projekt\\Images\\Unihamburg-logo.png
+map_Kd ..\Images\Unihamburg-logo.png
 
 newmtl Metal
 Ns 96.078431
@@ -64,7 +64,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd \\\\rzfilesrv2\\students\\home\\3rolff\\My Documents\\POV-Ray\\Projekt\\Images\\Metal.jpg
+map_Kd ..\Images\Metal.jpg
 
 newmtl Question
 Ns 96.078431
@@ -75,4 +75,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd \\rzfilesrv2\students\home\3rolff\My Documents\POV-Ray\Projekt\Images\Question_Block.png
+map_Kd ..\Images\Question_Block.png

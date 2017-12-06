@@ -281,7 +281,7 @@ average pigment_map{
  
 //==================================================
 //Map definitions
-#declare p_map1=pigment {image_map{png "//rzfilesrv2/students/home/3rolff/My Documents/POV-Ray/Projekt/Images/LevelTexture.png"   transmit all 0 } }
+#declare p_map1=pigment {image_map{png "Images/LevelTexture.png"   transmit all 0 } }
  
 //==================================================
 //Material definitions
