@@ -1,16 +1,38 @@
-include "colors.inc"
+#include "colors.inc"
+#include "Level.pov"
+
+#declare mario_position = 0.0;
+#declare mario_height = 0.0;
+    
+#macro SaveState()
+       #fopen wfile "state.txt" write
+       #write ( wfile, mario_position, ",", mario_height, ",")
+       #fclose file
+#end
+
+#macro LoadState()
+       #fopen rfile "state.txt" read
+       #read ( rfile, mario_position ,mario_height)
+       #fclose file
+#end
 
 #if (clock < 1)
     #declare walk = 1;
     #declare jump = 0;
+    #declare smalljump = 0;
+    #declare onblockjump = 0;
 #end
 #if (clock >= 1 & clock < 2)
-    #declare walk = 0;
-    #declare jump = 1;
-#end
-#if (clock >= 2 & clock < 3)
     #declare walk = 1;
     #declare jump = 0;
+    #declare smalljump = 0;
+    #declare onblockjump = 1;
+#end
+#if (clock >= 2 & clock < 3)
+    #declare walk = 0;
+    #declare jump = 1;
+    #declare smalljump = 0;
+    #declare onblockjump = 0;
 #end
 
 light_source { <500, 500, -1000> White }     
@@ -130,7 +152,7 @@ light_source { <500, 500, -1000> White }
 				#if (walk)
 				    rotate y * 20 * sin(2 * 3.141529 * clock)
 				#end
-				#if (jump)
+				#if (jump | smalljump | onblockjump)
 				    rotate y * -30 * abs(sin(3.141529 * clock))
 				    rotate z * -20 * abs(sin(3.141529 * clock))
 				#end
@@ -156,7 +178,7 @@ light_source { <500, 500, -1000> White }
                 #if (walk)
 				    rotate y * 20 * sin(2 * 3.141529 * clock)
 				#end       
-				#if (jump)
+				#if (jump | smalljump | onblockjump)
 				    rotate y * -30 * abs(sin(3.141529 * clock))
 				    rotate z * -80 * abs(sin(3.141529 * clock))
 				#end
@@ -183,7 +205,7 @@ light_source { <500, 500, -1000> White }
 				#if (walk)
 				    rotate x * 20 * sin(2 * 3.141529 * clock)
 				#end
-				#if (jump)
+				#if (jump | smalljump | onblockjump)
 				    rotate x * -30 * abs(sin(3.141529 * clock))
 				#end
 				translate <-0.45, -2.0, 0>
@@ -207,30 +229,51 @@ light_source { <500, 500, -1000> White }
 				#if (walk)
 				    rotate x * -20 * sin(2 * 3.141529 * clock)
 				#end
-				#if (jump)
+				#if (jump | smalljump | onblockjump)
 				    rotate x * 30 * abs(sin(3.141529 * clock))
 				#end
 				translate <-0.45, -2.0, 0>
 			}
 		}
-	}	
+	}
+	scale <0.17,0.17,0.17>
+	translate<0,0.80,0>	
 };
+
+#if (clock > 0)
+    LoadState()
+#end
 
 object {
 	MARIO
 	#if (walk)
-	    translate <0, 0, -4 * clock>
+	    #declare mario_position = mario_position + -3 * clock_delta;
+	    translate <0, mario_height,mario_position>
 	#end
 	#if (jump)
-	    translate <0, 3 * abs(sin(3.141529 * clock)),-4 * clock>
+	    translate <0, mario_height + 3 * abs(sin(3.141529 * clock)),mario_position>
+	#end
+	#if (smalljump)
+	    translate<0,mario_height + 0.5*abs(sin(3.141529 * clock)), mario_position>
+	#end
+	#if (onblockjump)
+	    #declare mario_height = mario_height + clock_delta;
+	    #declare mario_position = mario_position + -3 * clock_delta;
+	    translate <0, mario_height, mario_position> 
 	#end
 }
-			
+
+SaveState()
+
+object {
+	LEVEL
+	rotate<0,90,0>
+}			
 
 background { color rgb <0.5, 0.5, 0.5>}			
 			
 camera {
-  location <20, 3, -15>
+  location <10, 3, -5>
   look_at <0, 1, 0,>																																																												
 } 
 
