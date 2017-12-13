@@ -3,36 +3,51 @@
 
 #declare mario_position = 0.0;
 #declare mario_height = 0.0;
+#declare camera_z = -5;
+
+#declare walk = 0;
+#declare jump = 0;
+#declare smalljump = 0;
+#declare onblockjump = 0;
+#declare move_camera = 0;
+#declare move_camera_factor = 0.0;
+#declare fall = 0;
+#declare fall_factor = 0;
     
 #macro SaveState()
        #fopen wfile "state.txt" write
-       #write ( wfile, mario_position, ",", mario_height, ",")
+       #write ( wfile, mario_position, ",", mario_height, ",", camera_z, ",")
        #fclose file
 #end
 
 #macro LoadState()
        #fopen rfile "state.txt" read
-       #read ( rfile, mario_position ,mario_height)
+       #read ( rfile, mario_position ,mario_height, camera_z)
        #fclose file
 #end
 
 #if (clock < 1)
-    #declare walk = 0;
-    #declare jump = 0;
     #declare smalljump = 1;
-    #declare onblockjump = 0;
 #end
 #if (clock >= 1 & clock < 2)
     #declare walk = 1;
-    #declare jump = 0;
-    #declare smalljump = 0;
-    #declare onblockjump = 0;
 #end
 #if (clock >= 2 & clock < 3)
-    #declare walk = 0;
-    #declare jump = 0;
-    #declare smalljump = 0;
+    #declare walk = 1;
     #declare onblockjump = 1;
+#end
+#if (clock >= 3 & clock < 4)
+    #declare walk = 1;
+    #declare jump = 1;
+    #declare move_camera = 1;
+    #declare move_camera_factor = 8.0;
+#end
+#if (clock >= 4 & clock < 5)
+    #declare walk = 1;
+    #declare move_camera = 1;
+    #declare move_camera_factor = 8.0;
+    #declare fall = 1;
+    #declare fall_factor = 1.8;
 #end
 
 light_source { <500, 500, -1000> White }     
@@ -248,19 +263,27 @@ object {
 	MARIO
 	#if (walk)
 	    #declare mario_position = mario_position + -2.8 * clock_delta;
-	    translate <0, mario_height,mario_position>
+	    
 	#end
 	#if (jump)
-	    translate <0, mario_height + 3 * abs(sin(3.141529 * clock)),mario_position>
+	    //#declare mario_height = mario_height + 3 * abs(sin(3.141529 * clock));
+	    translate <0, 3 * abs(sin(3.141529 * clock)),0>
 	#end
 	#if (smalljump)
-	    translate<0,mario_height + 0.5*abs(sin(3.141529 * clock)), mario_position>
+	    //#declare mario_height = mario_height + 0.5*abs(sin(3.141529 * clock));
+	    translate<0,0.5*abs(sin(3.141529 * clock)), 0>
 	#end
 	#if (onblockjump)
 	    #declare mario_height = mario_height + 1.8*clock_delta;
-	    #declare mario_position = mario_position + -2.8 * clock_delta;
-	    translate <0, mario_height, mario_position> 
+	    //#declare mario_position = mario_position + -2.8 * clock_delta; 
 	#end
+	#if (move_camera)
+	    #declare camera_z = camera_z + -move_camera_factor * clock_delta;
+	#end
+	#if (fall)
+	    #declare mario_height = mario_height - fall_factor * clock_delta;
+	#end
+	translate <0, mario_height,mario_position>
 }
 
 SaveState()
@@ -273,8 +296,8 @@ object {
 background { color rgb <0.5, 0.5, 0.5>}			
 			
 camera {
-  location <10, 3, -5>
-  look_at <0, 1, 0,>																																																												
+  location <10, 3, camera_z>
+  look_at <0, 3, 0,>																																																												
 } 
 
 //camera {
