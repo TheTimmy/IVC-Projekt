@@ -31,84 +31,90 @@ radiosity {
 #include "PovLevel/Ground_POV_geom.inc"
 #include "PovLevel/Tube_POV_geom.inc"
 #include "PovLevel/Burg_POV_geom.inc"
-#include "PovLevel/Flagpole_POV_geom.inc"
+#include "PovLevel/Flagpole_POV_geom.inc"  
 
-// Floor of the level
-object{
-    Ground_
-	translate <15, 0, 0>
-}	
+#declare LEVEL = union{
+    object
+    {
+        Ground_
+	    translate <15, 0, 0>
+	}	
 
-// Tube
+     // Tube
+	object
+	{
+	    Tube_
+	    translate <12, 1, 0>
+    }
 
-object{
-	Tube_
-	translate <12, 1, 0>
-}
+    object
+    {
+        Burg_ 
+        rotate y*180
+        translate <24.5, 2.2, 4>
+    }
 
-// Castle
-object{
-    Burg_ 
-    rotate y*180
-    translate <24.5, 2.2, 4>
-}
+	object
+	{        
+	    Flagpole_
+	    translate <20, 0, 0>
+    }
 
-// Flagpole
-object{
-	Flagpole_
-	translate <20, 0, 0>
-}
+    // Basic blocks
+    object
+    {     
+        Block_
+	    translate <0, 2, 0>
+    }			
 
-// Basic blocks
-object{
-    Block_
-	translate <0, 2, 0>
-}			
+    object
+    {    
+        Block_
+        translate <1.2, 2, 0>
+    }      
 
-object{
-    Block_
-    translate <1.2, 2, 0>
-}      
+	  
+    object
+    {     
+        QMBlock_
+        translate <0.6, 2, 0>
+    }	
 
-// Blocks with question mark	  
-object{
-    QMBlock_
-    translate <0.6, 2, 0>
-}	
+    object
+    {       
+        QMBlock_
+        translate <0.6, 4, 0>
+    }
 
-object{
-    QMBlock_
-    translate <0.6, 4, 0>
-}
+    // Basic blocks
+    object
+    {     
+        Block_
+	    translate <15, 2, 0>
+    }			
 
-// Basic blocks
-object{
-    Block_
-	translate <15, 2, 0>
-}			
+    object
+    {
+        Block_
+        translate <16.2, 2, 0>
+    }      
 
-object{
-    Block_
-    translate <16.2, 2, 0>
-}      
+    // Blocks with question mark	  
+    object
+    {     
+        QMBlock_
+        translate <15.6, 2, 0>
+    }	
 
-// Blocks with question mark	  
-object{
-    QMBlock_
-    translate <15.6, 2, 0>
-}	
-
-object{
-    QMBlock_
-    translate <15.6, 4, 0>
-}			
-
-
-  
+    object
+    {     
+        QMBlock_
+        translate <15.6, 4, 0>
+    }	
+};  
        
        
 background { color rgb <0.5, 0.5, 0.5>}			
-			
 
 camera {
   location <10, 30, -10>

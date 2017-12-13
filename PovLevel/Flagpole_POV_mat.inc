@@ -285,9 +285,9 @@ average pigment_map{
  
 //==================================================
 //Map definitions
-#declare p_map1=pigment {image_map{png "//rzfilesrv2/students/home/3rolff/My Documents/POV-Ray/Projekt/Images/Unihamburg-logo.png"   transmit all 0 } }
-#declare p_map2=pigment {image_map{png "Z://My Documents//POV-Ray//Projekt//Images//Brick_Block.png"   transmit all 0 } }
-#declare p_map3=pigment {image_map{jpeg "//rzfilesrv2/students/home/3rolff/My Documents/POV-Ray/Projekt/Images/Metal.jpg"   transmit all 0 } }
+#declare p_map1=pigment {image_map{png "Images/Unihamburg-logo.png"   transmit all 0 } }
+#declare p_map2=pigment {image_map{png "Images/Brick_Block.png"   transmit all 0 } }
+#declare p_map3=pigment {image_map{jpeg "Images/Metal.jpg"   transmit all 0 } }
  
 //==================================================
 //Material definitions
