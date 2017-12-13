@@ -17,22 +17,22 @@
 #end
 
 #if (clock < 1)
-    #declare walk = 1;
+    #declare walk = 0;
     #declare jump = 0;
-    #declare smalljump = 0;
+    #declare smalljump = 1;
     #declare onblockjump = 0;
 #end
 #if (clock >= 1 & clock < 2)
     #declare walk = 1;
     #declare jump = 0;
     #declare smalljump = 0;
-    #declare onblockjump = 1;
+    #declare onblockjump = 0;
 #end
 #if (clock >= 2 & clock < 3)
     #declare walk = 0;
-    #declare jump = 1;
+    #declare jump = 0;
     #declare smalljump = 0;
-    #declare onblockjump = 0;
+    #declare onblockjump = 1;
 #end
 
 light_source { <500, 500, -1000> White }     
@@ -247,7 +247,7 @@ light_source { <500, 500, -1000> White }
 object {
 	MARIO
 	#if (walk)
-	    #declare mario_position = mario_position + -3 * clock_delta;
+	    #declare mario_position = mario_position + -2.8 * clock_delta;
 	    translate <0, mario_height,mario_position>
 	#end
 	#if (jump)
@@ -257,8 +257,8 @@ object {
 	    translate<0,mario_height + 0.5*abs(sin(3.141529 * clock)), mario_position>
 	#end
 	#if (onblockjump)
-	    #declare mario_height = mario_height + clock_delta;
-	    #declare mario_position = mario_position + -3 * clock_delta;
+	    #declare mario_height = mario_height + 1.8*clock_delta;
+	    #declare mario_position = mario_position + -2.8 * clock_delta;
 	    translate <0, mario_height, mario_position> 
 	#end
 }
