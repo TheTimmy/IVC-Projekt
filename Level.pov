@@ -31,7 +31,7 @@ radiosity {
 #include "PovLevel/Ground_POV_geom.inc"
 #include "PovLevel/Tube_POV_geom.inc"
 #include "PovLevel/Burg_POV_geom.inc"
-#include "PovLevel/Flagpole_POV_geom.inc"  
+//#include "PovLevel/Flagpole_POV_geom.inc"  
 
 #declare LEVEL = union{
     object
@@ -54,11 +54,11 @@ radiosity {
         translate <24.5, 2.2, 4>
     }
 
-	object
+	/*object
 	{        
 	    Flagpole_
 	    translate <20, 0, 0>
-    }
+    }*/
 
     // Basic blocks
     object
