@@ -3,36 +3,88 @@
 
 #declare mario_position = 0.0;
 #declare mario_height = 0.0;
+#declare camera_z = -5;
+#declare look_at_y = 
+
+#declare walk = 0;
+#declare walk_factor = 1.0;
+
+#declare jump = 0;
+#declare jump_factor = 1.0;
+
+#declare smalljump = 0;
+#declare smalljump_factor = 1.0;
+
+#declare onblockjump = 0;
+#declare onblockjump_factor = 1.0;
+
+#declare move_camera = 0;
+#declare move_camera_factor = 1.0;
+
+#declare fall = 0;
+#declare fall_factor = 0;
+
+#declare waving = 0;
+
+#declare close_up = 0;
     
 #macro SaveState()
        #fopen wfile "state.txt" write
-       #write ( wfile, mario_position, ",", mario_height, ",")
+       #write ( wfile, mario_position, ",", mario_height, ",", camera_z, ",")
        #fclose file
 #end
 
 #macro LoadState()
        #fopen rfile "state.txt" read
-       #read ( rfile, mario_position ,mario_height)
+       #read ( rfile, mario_position ,mario_height, camera_z)
        #fclose file
 #end
-
 #if (clock < 1)
-    #declare walk = 0;
-    #declare jump = 0;
-    #declare smalljump = 1;
-    #declare onblockjump = 0;
+    #declare waving = 1;
+    #declare close_up = 1;
 #end
 #if (clock >= 1 & clock < 2)
-    #declare walk = 1;
-    #declare jump = 0;
-    #declare smalljump = 0;
-    #declare onblockjump = 0;
+    #declare waving = 1;
+    #declare close_up = 1;
 #end
 #if (clock >= 2 & clock < 3)
-    #declare walk = 0;
-    #declare jump = 0;
-    #declare smalljump = 0;
+    #declare smalljump = 1;
+    #declare smalljump_factor = 0.5;
+#end
+#if (clock >= 3 & clock < 4)
+    #declare walk = 1;
+    #declare walk_factor = -2.8;
+#end
+#if (clock >= 4 & clock < 5)
+    #declare walk = 1;
+    #declare walk_factor = -2.8;
+    
     #declare onblockjump = 1;
+    #declare onblockjump_factor = 1.8;
+#end
+#if (clock >= 5 & clock < 6)
+    #declare walk = 1;
+    #declare walk_factor = -2.8;
+    
+    #declare jump = 1;
+    #declare jump_factor = 3.0;
+    
+    #declare move_camera = 1;
+    #declare move_camera_factor = -8.0;
+#end
+#if (clock >= 6 & clock < 7)
+    #declare walk = 1;
+    #declare walk_factor = -2;
+    
+    #declare move_camera = 1;
+    #declare move_camera_factor = -8.0;
+    
+    #declare fall = 1;
+    #declare fall_factor = 1.8;
+#end
+#if (clock >= 7 & clock < 8)
+    #declare move_camera = 1;
+    #declare move_camera_factor = 8.0;
 #end
 
 light_source { <500, 500, -1000> White }     
@@ -68,13 +120,41 @@ light_source { <500, 500, -1000> White }
                 pigment {
                     White
                 }
+                texture{
+                    pigment{
+                        image_map{ png "./Images/eye.png"
+                            map_type 0 // 0=planar, 1=spherical, 2=cylindrical, 5=torus
+                            interpolate 2
+                            // 0=none, 1=linear, 2=bilinear, 4=normalized distance
+                            once // falls Bild nicht wiederholt werden soll.
+                        }
+                    } // end of image_map, end of pigment
+                finish { diffuse 0.9 phong 1}// end of finish
+                scale 0.4 translate<0.2,0.7,0>
+                }
+                
                 scale y * 1.4
-            }
-            sphere {
+                }
+                
+                sphere {
                 <-0.4, 0.9, -0.8> 0.2
                 pigment {
                     White
                 }
+                
+                texture{
+                    pigment{
+                        image_map{ png "./Images/eye.png"
+                            map_type 0 // 0=planar, 1=spherical, 2=cylindrical, 5=torus
+                            interpolate 2
+                            // 0=none, 1=linear, 2=bilinear, 4=normalized distance
+                            once // falls Bild nicht wiederholt werden soll.
+                        }
+                    } // end of image_map, end of pigment
+                finish { diffuse 0.9 phong 1}// end of finish
+                scale 0.4 translate<-0.6,0.7,0>
+                }
+                
                 scale y * 1.4
             }       
         }
@@ -182,6 +262,9 @@ light_source { <500, 500, -1000> White }
 				    rotate y * -30 * abs(sin(3.141529 * clock))
 				    rotate z * -80 * abs(sin(3.141529 * clock))
 				#end
+				#if (waving)
+				    rotate z * -80 * abs(sin(3.141529 * clock))
+				#end
 				translate <-0.45, -0.45, 0>
 			}
 		}
@@ -247,20 +330,29 @@ light_source { <500, 500, -1000> White }
 object {
 	MARIO
 	#if (walk)
-	    #declare mario_position = mario_position + -2.8 * clock_delta;
-	    translate <0, mario_height,mario_position>
+	    #declare mario_position = mario_position + walk_factor * clock_delta;
+	    
 	#end
 	#if (jump)
-	    translate <0, mario_height + 3 * abs(sin(3.141529 * clock)),mario_position>
+	    //#declare mario_height = mario_height + 3 * abs(sin(3.141529 * clock));
+	    translate <0, jump_factor * abs(sin(3.141529 * clock)),0>
 	#end
 	#if (smalljump)
-	    translate<0,mario_height + 0.5*abs(sin(3.141529 * clock)), mario_position>
+	    //#declare mario_height = mario_height + 0.5*abs(sin(3.141529 * clock));
+	    translate<0,smalljump_factor*abs(sin(3.141529 * clock)), 0>
 	#end
 	#if (onblockjump)
-	    #declare mario_height = mario_height + 1.8*clock_delta;
-	    #declare mario_position = mario_position + -2.8 * clock_delta;
-	    translate <0, mario_height, mario_position> 
+	    #declare mario_height = mario_height + onblockjump_factor*clock_delta;
+	    //#declare mario_position = mario_position + -2.8 * clock_delta; 
 	#end
+	#if (move_camera)
+	    #declare camera_z = camera_z + move_camera_factor * clock_delta;
+	    
+	#end
+	#if (fall)
+	    #declare mario_height = mario_height - fall_factor * clock_delta;
+	#end
+	translate <0, mario_height,mario_position>
 }
 
 SaveState()
@@ -273,9 +365,16 @@ object {
 background { color rgb <0.5, 0.5, 0.5>}			
 			
 camera {
-  location <10, 3, -5>
-  look_at <0, 1, 0,>																																																												
-} 
+  location <10, 3, camera_z>
+  look_at <0, 3, 0,>																																																												
+}
+
+#if (close_up)
+  camera {
+    location <0.0,0.8,-1.7>
+    look_at <0,0.8,0,>
+  }
+#end 
 
 //camera {
 //  location <0, 1, -10>
