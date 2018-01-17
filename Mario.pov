@@ -4,7 +4,10 @@
 #declare mario_position = 0.0;
 #declare mario_height = 0.0;
 #declare camera_z = -5;
-#declare look_at_y = 
+#declare look_at_z = 0;
+
+#declare ilaz = 0;
+#declare ilaz_factor = -3.0;
 
 #declare walk = 0;
 #declare walk_factor = 1.0;
@@ -30,18 +33,19 @@
     
 #macro SaveState()
        #fopen wfile "state.txt" write
-       #write ( wfile, mario_position, ",", mario_height, ",", camera_z, ",")
+       #write ( wfile, mario_position, ",", mario_height, ",", camera_z, ",", look_at_z, ",")
        #fclose file
 #end
 
 #macro LoadState()
        #fopen rfile "state.txt" read
-       #read ( rfile, mario_position ,mario_height, camera_z)
+       #read ( rfile, mario_position ,mario_height, camera_z, look_at_z)
        #fclose file
 #end
 #if (clock < 1)
     #declare waving = 1;
     #declare close_up = 1;
+    
 #end
 #if (clock >= 1 & clock < 2)
     #declare waving = 1;
@@ -70,7 +74,8 @@
     #declare jump_factor = 3.0;
     
     #declare move_camera = 1;
-    #declare move_camera_factor = -8.0;
+    #declare move_camera_factor = -4.0;
+    #declare ilaz = 1;
 #end
 #if (clock >= 6 & clock < 7)
     #declare walk = 1;
@@ -81,10 +86,11 @@
     
     #declare fall = 1;
     #declare fall_factor = 1.8;
+    #declare ilaz = 1;
 #end
 #if (clock >= 7 & clock < 8)
-    #declare move_camera = 1;
-    #declare move_camera_factor = 8.0;
+    #declare ilaz = 1;
+    #declare ilaz_factor = 5.0;
 #end
 
 light_source { <500, 500, -1000> White }     
@@ -122,7 +128,7 @@ light_source { <500, 500, -1000> White }
                 }
                 texture{
                     pigment{
-                        image_map{ png "./Images/eye.png"
+                        image_map{ png "./Images/greenEye.png"
                             map_type 0 // 0=planar, 1=spherical, 2=cylindrical, 5=torus
                             interpolate 2
                             // 0=none, 1=linear, 2=bilinear, 4=normalized distance
@@ -144,7 +150,7 @@ light_source { <500, 500, -1000> White }
                 
                 texture{
                     pigment{
-                        image_map{ png "./Images/eye.png"
+                        image_map{ png "./Images/greenEye.png"
                             map_type 0 // 0=planar, 1=spherical, 2=cylindrical, 5=torus
                             interpolate 2
                             // 0=none, 1=linear, 2=bilinear, 4=normalized distance
@@ -323,6 +329,42 @@ light_source { <500, 500, -1000> White }
 	translate<0,0.80,0>	
 };
 
+// Macro for the adjustment of images
+// for image_map with assumed_gamma = 1.0 ;
+#macro Correct_Pigment_Gamma(Orig_Pig, New_G)
+  #local Correct_Pig_fn =
+      function{ pigment {Orig_Pig} }
+  pigment{ average pigment_map{
+   [function{ pow(Correct_Pig_fn(x,y,z).x, New_G)}
+               color_map{[0 rgb 0][1 rgb<3,0,0>]}]
+   [function{ pow(Correct_Pig_fn(x,y,z).y, New_G)}
+               color_map{[0 rgb 0][1 rgb<0,3,0>]}]
+   [function{ pow(Correct_Pig_fn(x,y,z).z, New_G)}
+               color_map{[0 rgb 0][1 rgb<0,0,3>]}]
+   }}
+#end //
+// "image_map" gamma corrected:
+//    Correct_Pigment_Gamma(
+//    pigment{ image_map{ jpeg "colors.jpg"}}
+//    , Correct_Gamma)
+//------------------------------------------------
+
+box{ <-0.5, -0.5, -0.5>,< 0.5, 0.5, 0.5>
+ texture{ uv_mapping
+   Correct_Pigment_Gamma( // gamma correction
+     pigment{
+     image_map{ png "Images/Skybox.png"
+                map_type 0    // planar
+                interpolate 2 // bilinear
+                once //
+              } //  end of image_map
+    } // end of pigment
+    , 2.2) //, New_Gamma
+    finish { ambient 1 diffuse 0 }
+ } // end of texture
+scale 10000
+} // end of skybox --------------------
+
 #if (clock > 0)
     LoadState()
 #end
@@ -352,6 +394,9 @@ object {
 	#if (fall)
 	    #declare mario_height = mario_height - fall_factor * clock_delta;
 	#end
+	#if (ilaz)
+	    #declare look_at_z = look_at_z + ilaz_factor * clock_delta;
+	#end
 	translate <0, mario_height,mario_position>
 }
 
@@ -366,7 +411,7 @@ background { color rgb <0.5, 0.5, 0.5>}
 			
 camera {
   location <10, 3, camera_z>
-  look_at <0, 3, 0,>																																																												
+  look_at <0, 3, look_at_z,>																																																												
 }
 
 #if (close_up)
