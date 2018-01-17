@@ -1,3 +1,8 @@
 *.png
 *.bak
 *.db
+
+*.jpg
+false
+file
+state.txt

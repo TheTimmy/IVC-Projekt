@@ -21,19 +21,50 @@
     #declare jump = 0;
     #declare smalljump = 0;
     #declare onblockjump = 1;
+    #declare onblockjump_2 = 0;
+    #declare jump_down = 0;
 #end
-#if (clock >= 1 & clock < 2)
+#if (clock >= 1 & clock < 1.3)
     #declare walk = 1;
     #declare jump = 0;
     #declare smalljump = 0;
     #declare onblockjump = 0;
+    #declare onblockjump_2 = 0;
+    #declare jump_down = 0;
 #end
-#if (clock >= 2 & clock < 3)
+#if (clock >= 1.3 & clock < 2.2)
     #declare walk = 0;
     #declare jump = 0;
     #declare smalljump = 0;
-    #declare onblockjump = 1;
+    #declare onblockjump = 0;
+    #declare onblockjump_2 = 1;
+    #declare jump_down = 0;
 #end
+#if (clock >= 2.2 & clock < 2.75)
+    #declare walk = 1;
+    #declare jump = 0;
+    #declare smalljump = 0;
+    #declare onblockjump = 0;
+    #declare onblockjump_2 = 0;
+    #declare jump_down = 0;
+#end
+#if (clock >= 2.75 & clock < 3.6)
+    #declare walk = 0;
+    #declare jump = 0;
+    #declare smalljump = 0;
+    #declare onblockjump = 0;
+    #declare onblockjump_2 = 0;
+    #declare jump_down = 1;
+#end
+#if (clock >= 3.6 & clock < 6)
+    #declare walk = 1;
+    #declare jump = 0;
+    #declare smalljump = 0;
+    #declare onblockjump = 0;
+    #declare onblockjump_2 = 0;
+    #declare jump_down = 0;
+#end
+
 
 light_source { <500, 500, -1000> White }     
 
@@ -240,6 +271,42 @@ light_source { <500, 500, -1000> White }
 	translate<0,0.70,-9.8>	
 };
 
+// Macro for the adjustment of images
+// for image_map with assumed_gamma = 1.0 ;
+#macro Correct_Pigment_Gamma(Orig_Pig, New_G)
+  #local Correct_Pig_fn =
+      function{ pigment {Orig_Pig} }
+  pigment{ average pigment_map{
+   [function{ pow(Correct_Pig_fn(x,y,z).x, New_G)}
+               color_map{[0 rgb 0][1 rgb<3,0,0>]}]
+   [function{ pow(Correct_Pig_fn(x,y,z).y, New_G)}
+               color_map{[0 rgb 0][1 rgb<0,3,0>]}]
+   [function{ pow(Correct_Pig_fn(x,y,z).z, New_G)}
+               color_map{[0 rgb 0][1 rgb<0,0,3>]}]
+   }}
+#end //
+// "image_map" gamma corrected:
+//    Correct_Pigment_Gamma(
+//    pigment{ image_map{ jpeg "colors.jpg"}}
+//    , Correct_Gamma)
+//------------------------------------------------
+
+box{ <-0.5, -0.5, -0.5>,< 0.5, 0.5, 0.5>
+ texture{ uv_mapping
+   Correct_Pigment_Gamma( // gamma correction
+     pigment{
+     image_map{ png "Images/Skybox.png"
+                map_type 0    // planar
+                interpolate 2 // bilinear
+                once //
+              } //  end of image_map
+    } // end of pigment
+    , 2.2) //, New_Gamma
+    finish { ambient 1 diffuse 0 }
+ } // end of texture
+scale 10000
+} // end of skybox --------------------
+
 #if (clock > 0)
     LoadState()
 #end
@@ -261,6 +328,16 @@ object {
 	    #declare mario_position = mario_position + -1.5 * clock_delta;
 	    translate <0, mario_height, mario_position> 
 	#end
+	#if (onblockjump_2)
+	    #declare mario_height = mario_height + 1.0*clock_delta;
+	    #declare mario_position = mario_position + -3.0 * clock_delta;
+	    translate <0, mario_height, mario_position>
+	#end
+	#if (jump_down)
+	    #declare mario_height = mario_height - 2.5*clock_delta;
+	    #declare mario_position = mario_position + -1.5 * clock_delta;
+	    translate <0, mario_height, mario_position>
+	#end
 }
 
 SaveState()
@@ -270,11 +347,16 @@ object {
 	rotate<0,90,0>
 }			
 
-background { color rgb <0.5, 0.5, 0.5>}			
+//background { color rgb <0.5, 0.5, 0.5>}			
 			
+//camera {            
+//  location <-15, 1, -15>
+//  look_at <0, 1, -15>																																																												
+//}  
+
 camera {
-  location <-10, 1, -10>
-  look_at <0, 1, -10>																																																												
+  location <10, 3, 5>
+  look_at <0, 3, 0,>																																																												
 } 
 
 //camera {
