@@ -1,3 +1,6 @@
+#declare Photons=off;
+#declare Radiosity=off;
+
 #include "colors.inc"
 #include "Level.pov"
 
@@ -66,7 +69,7 @@
 #end
 
 
-light_source { <500, 500, -1000> White }     
+light_source { <500, 500, -1000> White }    
 
 #declare SKINCOLOR = rgb <0.933, 0.811, 0.705>;
 
@@ -99,12 +102,36 @@ light_source { <500, 500, -1000> White }
                 pigment {
                     White
                 }
+                texture{
+                    pigment{
+                        image_map{ png "./Images/greenEye.png"
+                            map_type 0 // 0=planar, 1=spherical, 2=cylindrical, 5=torus
+                            interpolate 2
+                            // 0=none, 1=linear, 2=bilinear, 4=normalized distance
+                            once // falls Bild nicht wiederholt werden soll.
+                        }
+                    } // end of image_map, end of pigment
+                  finish { diffuse 0.9 phong 1}// end of finish
+                  scale 0.4 translate<0.2,0.7,0> 
+                }
                 scale y * 1.4
             }
             sphere {
                 <-0.4, 0.9, -0.8> 0.2
                 pigment {
                     White
+                }
+                texture{
+                    pigment{
+                        image_map{ png "./Images/greenEye.png"
+                            map_type 0 // 0=planar, 1=spherical, 2=cylindrical, 5=torus
+                            interpolate 2
+                            // 0=none, 1=linear, 2=bilinear, 4=normalized distance
+                            once // falls Bild nicht wiederholt werden soll.
+                        }
+                    } // end of image_map, end of pigment
+                  finish { diffuse 0.9 phong 1}// end of finish
+                  scale 0.4 translate<-0.6,0.7,0>
                 }
                 scale y * 1.4
             }       
@@ -291,22 +318,6 @@ light_source { <500, 500, -1000> White }
 //    , Correct_Gamma)
 //------------------------------------------------
 
-box{ <-0.5, -0.5, -0.5>,< 0.5, 0.5, 0.5>
- texture{ uv_mapping
-   Correct_Pigment_Gamma( // gamma correction
-     pigment{
-     image_map{ png "Images/Skybox.png"
-                map_type 0    // planar
-                interpolate 2 // bilinear
-                once //
-              } //  end of image_map
-    } // end of pigment
-    , 2.2) //, New_Gamma
-    finish { ambient 1 diffuse 0 }
- } // end of texture
-scale 10000
-} // end of skybox --------------------
-
 #if (clock > 0)
     LoadState()
 #end
@@ -347,19 +358,41 @@ object {
 	rotate<0,90,0>
 }			
 
-//background { color rgb <0.5, 0.5, 0.5>}			
+background { color rgb <0.3515, 0.6406, 1>}			
 			
-//camera {            
-//  location <-15, 1, -15>
-//  look_at <0, 1, -15>																																																												
-//}  
+camera {            
+  location <-5, 1, -15>
+  look_at <0, 1, mario_position - 10>																																																												
+}  
+          
 
-camera {
+box{
+ <-1, -1, -1>,
+ < 1, 1, 1>
+ texture{ uv_mapping
+   pigment{
+     image_map{ png "Skybox.png"
+                map_type 0    // planar
+                interpolate 2 // bilinear
+                once //
+              } //  end of image_map
+    } // end of pigment
+    //, 2.2) //, New_Gamma
+    finish { ambient 1 diffuse 0 }
+ } // end of texture
+ translate <0, -0.2, 0>
+ scale 10000 * 2048 / 1536
+ rotate y*90
+} // end of skybox --------------------
+
+          
+          
+/*camera {
   location <10, 3, 5>
   look_at <0, 3, 0,>																																																												
-} 
+}*/ 
 
-//camera {
-//  location <0, 1, -10>
-//  look_at <0, 0, 0,>																																																												
-//}
+/*camera {
+  location <0, 1, -10>
+  look_at <0, 0, 0,>																																																												
+}*/
