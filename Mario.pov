@@ -4,10 +4,15 @@
 #declare mario_position = 0.0;
 #declare mario_height = 0.0;
 #declare camera_z = -5;
+#declare camera_x = 7.5;
 #declare look_at_z = 0;
+#declare look_at_y = 3;
 
 #declare ilaz = 0;
 #declare ilaz_factor = -3.0;
+
+#declare ilay = 0;
+#declare ilay_factor = -1.0;
 
 #declare walk = 0;
 #declare walk_factor = 1.0;
@@ -24,6 +29,9 @@
 #declare move_camera = 0;
 #declare move_camera_factor = 1.0;
 
+#declare camera_distance = 0;
+#declare camera_distance_factor = 1.0;
+
 #declare fall = 0;
 #declare fall_factor = 0;
 
@@ -33,13 +41,13 @@
     
 #macro SaveState()
        #fopen wfile "state.txt" write
-       #write ( wfile, mario_position, ",", mario_height, ",", camera_z, ",", look_at_z, ",")
+       #write ( wfile, mario_position, ",", mario_height, ",", camera_z, ",", look_at_z, ",", camera_x, ",", look_at_y, ",")
        #fclose file
 #end
 
 #macro LoadState()
        #fopen rfile "state.txt" read
-       #read ( rfile, mario_position ,mario_height, camera_z, look_at_z)
+       #read ( rfile, mario_position ,mario_height, camera_z, look_at_z, camera_x, look_at_y)
        #fclose file
 #end
 #if (clock < 1)
@@ -65,6 +73,11 @@
     
     #declare onblockjump = 1;
     #declare onblockjump_factor = 1.8;
+    
+    #declare move_camera = 1;
+    #declare move_camera_factor = -1.0;
+    #declare ilaz = 1;
+    #declare ilaz_factor = -1.5;
 #end
 #if (clock >= 5 & clock < 6)
     #declare walk = 1;
@@ -74,7 +87,7 @@
     #declare jump_factor = 3.0;
     
     #declare move_camera = 1;
-    #declare move_camera_factor = -4.0;
+    #declare move_camera_factor = -8.0;
     #declare ilaz = 1;
 #end
 #if (clock >= 6 & clock < 7)
@@ -82,15 +95,21 @@
     #declare walk_factor = -2;
     
     #declare move_camera = 1;
-    #declare move_camera_factor = -8.0;
+    #declare move_camera_factor = -4.0;
     
     #declare fall = 1;
     #declare fall_factor = 1.8;
     #declare ilaz = 1;
 #end
 #if (clock >= 7 & clock < 8)
+    #declare move_camera = 1;
+    #declare move_camera_factor = 3.0;
     #declare ilaz = 1;
-    #declare ilaz_factor = 5.0;
+    #declare ilaz_factor = -2.0;
+    #declare camera_distance = 1;
+    #declare camera_distance_factor = -4.0;
+    #declare ilay = 1;
+    #declare ilay_factor = -1.5;
 #end
 
 light_source { <500, 500, -1000> White }     
@@ -391,11 +410,17 @@ object {
 	    #declare camera_z = camera_z + move_camera_factor * clock_delta;
 	    
 	#end
+	#if (camera_distance)
+	    #declare camera_x = camera_x + camera_distance_factor * clock_delta;
+	#end
 	#if (fall)
 	    #declare mario_height = mario_height - fall_factor * clock_delta;
 	#end
 	#if (ilaz)
 	    #declare look_at_z = look_at_z + ilaz_factor * clock_delta;
+	#end
+	#if (ilay)
+	    #declare look_at_y = look_at_y + ilay_factor * clock_delta;
 	#end
 	translate <0, mario_height,mario_position>
 }
@@ -410,8 +435,8 @@ object {
 background { color rgb <0.5, 0.5, 0.5>}			
 			
 camera {
-  location <10, 3, camera_z>
-  look_at <0, 3, look_at_z,>																																																												
+  location <camera_x, 3, camera_z>
+  look_at <0, look_at_y, look_at_z,>																																																												
 }
 
 #if (close_up)
